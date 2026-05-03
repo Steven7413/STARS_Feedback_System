@@ -445,16 +445,25 @@ function generateQR(forceLocal = false) {
         const helpText = document.querySelector("#qr-modal p");
         const modalTitle = document.querySelector("#qr-modal h2");
         
-        if (host.includes("ngrok") || (typeof PUBLIC_URL !== 'undefined' && host === PUBLIC_URL)) {
+                const isPublic = host.startsWith('http') && (
+            host.includes("onrender.com") ||
+            isPublic ?
+            host.includes("trycloudflare.com") ||
+            host.includes("netlify.app")
+        );
+        
+        if (isPublic) {
             modalTitle.textContent = "Student Access (PUBLIC)";
             modalTitle.style.color = "var(--le-gold)";
-            helpText.innerHTML = "⚠️ <b>On phone:</b> Click <b>'Visit Site'</b> to bypass the warning.";
-            helpText.style.color = "#ffdd00";
+            helpText.innerHTML = "📱 Scan with any phone — works on any network!";
+            helpText.style.color = "#00FF41";
         } else {
             modalTitle.textContent = "Student Access (LOCAL WI-FI)";
             modalTitle.style.color = "var(--le-green)";
             helpText.textContent = "Phone must be on SAME Wi-Fi as this computer.";
             helpText.style.color = "#00FF41";
+        }
+        
         }
 
         // Add a toggle button if not present
@@ -472,7 +481,7 @@ function generateQR(forceLocal = false) {
             };
             document.querySelector('.modal-content').insertBefore(toggleBtn, document.querySelector('#qr-modal button:last-child'));
         }
-        document.getElementById('qr-toggle-btn').textContent = host.includes("ngrok") ? "SWITCH TO LOCAL WI-FI LINK" : "SWITCH TO PUBLIC LINK";
+        document.getElementById('qr-toggle-btn').textContent = isPublic ? "SWITCH TO LOCAL WI-FI LINK" : "SWITCH TO PUBLIC LINK";
 
         // Clear and Draw
         document.getElementById("qrcode").innerHTML = "";
