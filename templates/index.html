@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.T.A.R.S. MATRIX</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/js/qrcode.min.js"></script>
+    <script>
+        // Server variables injected by Flask
+        const SERVER_IP = "{{ server_ip }}"; // Default active one
+        const LOCAL_IP = "{{ local_ip }}";   // Pure local IP
+        const PUBLIC_URL = "{{ public_url }}"; // Ngrok URL (if any)
+    </script>
+    <script src="/static/js/client.js" defer></script>
+</head>
+
+<body>
+
+    <!-- Role Selector Dialog -->
+    <div id="role-selector">
+        <img src="/static/images/stars_shield.png" alt="S.T.A.R.S. Matrix Certified" class="role-logo">
+        <h1>S.T.A.R.S. MATRIX<sup style="font-size: 0.5em; vertical-align: top;">&reg;</sup></h1>
+        <p>Select Your Role</p>
+        <input type="text" id="student-name-input" placeholder="Enter Your Name (Required)" class="name-input">
+        <div class="btn-group">
+            <button class="matrix-btn" onclick="selectRole('student')" style="font-size: 1.5rem;">Participant</button>
+            <button class="matrix-btn" onclick="selectRole('instructor')" style="font-size: 1.5rem;">Instructor</button>
+        </div>
+    </div>
+
+    <!-- App Container -->
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="/static/images/stars_shield.png" alt="S.T.A.R.S. Shield" class="logo-img">
+                <div class="logo-text">
+                    <h2 style="margin:0; text-align:left;">S.T.A.R.S. MATRIX</h2>
+                    <small style="color:var(--le-silver); font-weight:600;">NEURO LINGUISTIC BEHAVIORAL CRISIS
+                        SYSTEM</small>
+                </div>
+                <img src="/static/images/stars_owl.png" alt="S.T.A.R.S. Owl" class="logo-img"
+                    style="height: 70px; margin-left:10px;">
+            </div>
+            <div id="connection-status" class="status-indicator">CONNECTING...</div>
+            <div style="position:absolute; top:5px; right:5px; color:#555; font-size:10px;">Server IP: {{ server_ip }}
+            </div>
+        </header>
+
+        <!-- STUDENT VIEW -->
+        <main id="student-view" class="hidden">
+            <h2 class="pillar-title">Live Assessment</h2>
+
+            <!-- Video Removed (Projector Mode) -->
+
+            <!-- The 3 Pillars -->
+            <div class="pillars-grid">
+
+                <!-- Pillar 1: NEURO -->
+                <div class="pillar-card">
+                    <h3 class="pillar-title">NEURO PILLAR</h3>
+                    <div class="btn-group">
+                        <button class="matrix-btn" data-category="neuro_brain" data-value="Dinosaur">Dinosaur</button>
+                        <button class="matrix-btn" data-category="neuro_brain" data-value="Dolphin">Dolphin</button>
+                        <button class="matrix-btn" data-category="neuro_brain" data-value="Human">Human</button>
+                    </div>
+                    <div class="aggression-meter">
+                        <h4>Aggression Level</h4>
+                        <button class="matrix-btn level-btn" data-category="neuro_level" data-value="1">Level 1 -
+                            Baseline</button>
+                        <button class="matrix-btn level-btn" data-category="neuro_level" data-value="2">Level 2 -
+                            Anxiety</button>
+                        <button class="matrix-btn level-btn" data-category="neuro_level" data-value="3">Level 3 -
+                            Verbal</button>
+                        <button class="matrix-btn level-btn" data-category="neuro_level" data-value="4">Level 4 -
+                            Physical</button>
+                        <button class="matrix-btn level-btn" data-category="neuro_level" data-value="5">Level 5 -
+                            Danger</button>
+                    </div>
+                </div>
+
+                <!-- Pillar 2: BEHAVIOR (OWLS) -->
+                <div class="pillar-card">
+                    <h3 class="pillar-title">BEHAVIOR PILLAR (OWLS)</h3>
+                    <div class="btn-group" style="flex-direction: column;">
+                        <button class="matrix-btn" data-category="owls" data-value="Out">O - OUT (Escape)</button>
+                        <button class="matrix-btn" data-category="owls" data-value="Watched">W - WATCHED
+                            (Attention)</button>
+                        <button class="matrix-btn" data-category="owls" data-value="Locked On">L - LOCKED ON
+                            (Tangible)</button>
+                        <button class="matrix-btn" data-category="owls" data-value="Soothing">S - SOOTHING
+                            (Auto)</button>
+                    </div>
+                </div>
+
+                <!-- Pillar 3: RFT FRAMES -->
+                <div class="pillar-card">
+                    <h3 class="pillar-title">RFT FRAMES</h3>
+                    <div class="btn-group" style="flex-direction: column;">
+                        <button class="matrix-btn" data-category="rft" data-value="Coordination">Coordination</button>
+                        <button class="matrix-btn" data-category="rft" data-value="Deictic">Deictic</button>
+                        <button class="matrix-btn" data-category="rft" data-value="Oppositional">Oppositional</button>
+                        <button class="matrix-btn" data-category="rft" data-value="Temporal">Temporal</button>
+                        <button class="matrix-btn" data-category="rft" data-value="Hierarchical">Hierarchical</button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- INSTRUCTOR VIEW -->
+        <main id="instructor-view" class="hidden">
+
+            <!-- Toolbar: Controls & Access -->
+            <div class="dashboard-toolbar">
+                <div style="flex:1;">
+                    <h3 class="toolbar-title">Live Session Monitor</h3>
+                    <div style="display:flex; gap:15px; margin-top:5px; align-items:center;">
+                        <span style="color:var(--le-green); font-weight:bold; font-family:monospace;">
+                            ACTIVE: <span id="metric-active-students">0</span>
+                        </span>
+                        <span style="color:var(--le-gold); font-weight:bold; font-family:monospace;">
+                            RESPONSES: <span id="metric-total-responses">0</span>
+                        </span>
+                        <!-- Session Timer -->
+                        <div id="session-timer-box"
+                            style="background:#222; padding:5px 10px; border:1px solid #444; border-radius:4px; margin-left:15px; display:flex; align-items:center; gap:10px;">
+                            <span style="color:#aaa; font-size:0.8em; margin-right:5px;">SESSION TIMER:</span>
+                            <span id="session-timer"
+                                style="color:#fff; font-family:monospace; font-weight:bold; font-size:1.2em;">00:00:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IOA Score Display -->
+                <div id="ioa-box"
+                    style="background:#333; padding:10px 20px; border-radius:8px; border:2px solid #555; text-align:center; min-width:120px;">
+                    <small style="color:#aaa; display:block; font-size:0.7em;">OVERALL IOA</small>
+                    <span id="ioa-value" style="font-size:1.8em; font-weight:900; color:#ff4444;">0%</span>
+                </div>
+
+                <!-- Session Actions -->
+                <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; max-width:400px;">
+                    <button class="matrix-btn" onclick="startSession()" id="btn-start"
+                        style="width:auto; font-size:0.9rem;">▶ START (8h)</button>
+                    <button class="matrix-btn" onclick="extendSession()" id="btn-extend"
+                        style="width:auto; font-size:0.9rem;">+1 HR</button>
+                    <button class="matrix-btn" onclick="downloadReport()"
+                        style="width:auto; font-size:0.9rem; border-color:var(--le-blue);">📄 REPORT</button>
+
+                    <button class="matrix-btn" onclick="toggleQR(true)"
+                        style="width:auto; border-color:var(--le-silver); font-size:0.9rem;">
+                        📱 LINK
+                    </button>
+                    <button class="matrix-btn" onclick="resetSession()"
+                        style="width:auto; background: #8B0000; border-color:#ff4444; color:white; font-size:0.9rem;">
+                        ⚠️ RESET
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Charts Grid -->
+            <div class="chart-grid">
+                <!-- Row 1: Trend Graph (Full Width) -->
+                <div class="chart-container" style="flex: 1 1 100%; min-height: 250px;">
+                    <h3>Group Reliability Trend (8h) <small style="color:var(--le-silver); font-size:0.7em;">Target:
+                            80%</small></h3>
+                    <div style="flex:1; position:relative; height:200px;">
+                        <canvas id="chart-trend"></canvas>
+                    </div>
+                </div>
+
+                <!-- Neuro -->
+                <div class="chart-container">
+                    <h3>Brain State (Neuro)
+                        <small style="color:var(--le-silver); font-size:0.7em; margin-left:10px;">
+                            (N: <span id="count-neuro">0</span>) | IOA: <span id="ioa-neuro"
+                                style="color:#ff4444; font-weight:bold;">0%</span>
+                        </small>
+                    </h3>
+                    <div style="flex:1; position:relative;">
+                        <canvas id="chart-neuro"></canvas>
+                    </div>
+                </div>
+
+                <!-- Aggression -->
+                <div class="chart-container">
+                    <h3>Aggression Levels
+                        <small style="color:var(--le-silver); font-size:0.7em; margin-left:10px;">
+                            (N: <span id="count-aggression">0</span>) | IOA: <span id="ioa-aggression"
+                                style="color:#ff4444; font-weight:bold;">0%</span>
+                        </small>
+                    </h3>
+                    <div style="flex:1; position:relative;">
+                        <canvas id="chart-aggression"></canvas>
+                    </div>
+                </div>
+
+                <!-- OWLS -->
+                <div class="chart-container">
+                    <h3>Behavior (OWLS)
+                        <small style="color:var(--le-silver); font-size:0.7em; margin-left:10px;">
+                            (N: <span id="count-owls">0</span>) | IOA: <span id="ioa-owls"
+                                style="color:#ff4444; font-weight:bold;">0%</span>
+                        </small>
+                    </h3>
+                    <div style="flex:1; position:relative;">
+                        <canvas id="chart-owls"></canvas>
+                    </div>
+                </div>
+
+                <!-- RFT -->
+                <div class="chart-container">
+                    <h3>Relational Frames (RFT)
+                        <small style="color:var(--le-silver); font-size:0.7em; margin-left:10px;">
+                            (N: <span id="count-rft">0</span>) | IOA: <span id="ioa-rft"
+                                style="color:#ff4444; font-weight:bold;">0%</span>
+                        </small>
+                    </h3>
+                    <div style="flex:1; position:relative;">
+                        <canvas id="chart-rft"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity (Collapsed/Bottom) -->
+            <div class="pillar-card" style="min-height:auto;">
+                <h4 style="margin:0 0 10px 0; color:var(--le-silver); display:flex; justify-content:space-between;">
+                    Incoming Signal Feed
+                    <span style="font-size:0.8em; opacity:0.7;">Live Stream</span>
+                </h4>
+                <div id="feedback-log" class="feedback-ticker">
+                    <!-- Logs go here -->
+                </div>
+            </div>
+
+            <!-- QR Code Modal (Hidden by default) -->
+            <div id="qr-modal" class="modal-overlay hidden">
+                <div class="modal-content">
+                    <h2 style="color:var(--le-gold);">Student Access</h2>
+                    <div id="qrcode"
+                        style="margin:20px auto; background:white; padding:10px; display:inline-block; border-radius:4px;">
+                    </div>
+                    <div class="url-display" id="join-url"
+                        style="color:var(--le-navy); font-weight:bold; margin-bottom:15px;"></div>
+                    <p style="color:#888; font-size:0.8em; margin-bottom:15px;">Scan to Join Session</p>
+
+                    <button class="control-btn" style="margin-top:20px; background:#444;"
+                        onclick="toggleQR(false)">CLOSE</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</body>
+
+</html>

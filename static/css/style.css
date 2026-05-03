@@ -1,0 +1,332 @@
+:root {
+    --le-blue: #002347;
+    /* Deep Navy Blue */
+    --le-gold: #C5B358;
+    /* Badge Gold */
+    --le-silver: #E5E4E2;
+    /* Platinum/Silver */
+    --le-white: #FFFFFF;
+    --glass-bg: rgba(0, 35, 71, 0.85);
+    /* Blue-tinted glass */
+    --glass-border: 1px solid var(--le-gold);
+    --text-glow: 0 0 2px var(--le-silver);
+}
+
+body {
+    background-color: #0d1117;
+    color: var(--le-silver);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* More professional font */
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: linear-gradient(135deg, #02111b 0%, #002347 100%);
+    min-height: 100vh;
+}
+
+h1,
+h2,
+h3 {
+    text-transform: uppercase;
+    color: var(--le-gold);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.container {
+    max-width: 1400px;
+    /* Wider for dashboard */
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--le-gold);
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-img {
+    height: 80px;
+    width: auto;
+    /* Ensure visibility against dark background if logos are dark */
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+    transition: transform 0.3s ease;
+}
+
+.logo-img:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 12px rgba(197, 179, 88, 0.6));
+    /* Gold glow on hover */
+}
+
+.status-indicator {
+    font-size: 0.9rem;
+    padding: 5px 15px;
+    border: 1px solid var(--le-silver);
+    background: var(--le-blue);
+    color: var(--le-white);
+    border-radius: 4px;
+}
+
+/* Three Pillars Layout */
+.pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.pillar-card {
+    background: linear-gradient(180deg, rgba(0, 35, 71, 0.9) 0%, rgba(2, 17, 27, 0.95) 100%);
+    border: 1px solid var(--le-gold);
+    border-top: 4px solid var(--le-gold);
+    /* Badge accent top */
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.pillar-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(197, 179, 88, 0.1);
+}
+
+.pillar-title {
+    border-bottom: 1px solid var(--le-silver);
+    color: var(--le-white);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    font-weight: 600;
+}
+
+/* Buttons */
+.matrix-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--le-silver);
+    color: var(--le-silver);
+    padding: 12px 15px;
+    margin: 5px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    width: 100%;
+    border-radius: 4px;
+}
+
+.matrix-btn:hover,
+.matrix-btn.active {
+    background: var(--le-gold);
+    color: #000;
+    border-color: var(--le-gold);
+    box-shadow: 0 0 15px rgba(197, 179, 88, 0.4);
+    font-weight: bold;
+}
+
+.btn-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.aggression-meter {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-top: 15px;
+}
+
+.level-btn {
+    flex: 1;
+    font-size: 0.85rem;
+    border-color: #555;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.level-btn:hover,
+.level-btn.active {
+    background: #d9534f;
+    /* Alert Red for Aggression */
+    color: white;
+    box-shadow: none;
+    border: 1px solid red;
+}
+
+/* Role Selection */
+#role-selector {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.hidden {
+    display: none !important;
+}
+
+
+/* Instructor Dashboard Redesign */
+.dashboard-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 35, 71, 0.9);
+    border: 1px solid var(--le-gold);
+    padding: 15px 25px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.toolbar-title {
+    margin: 0;
+    color: var(--le-white);
+    font-size: 1.2rem;
+    text-align: left;
+}
+
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.chart-container {
+    background: rgba(0, 35, 71, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 3px solid var(--le-gold);
+    border-radius: 6px;
+    padding: 15px;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-container h4 {
+    margin-top: 0;
+    color: var(--le-silver);
+    font-size: 0.9rem;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feedback-ticker {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--le-silver);
+    padding: 10px;
+    border-radius: 4px;
+    font-family: monospace;
+    color: var(--le-green);
+    height: 150px;
+    overflow-y: auto;
+}
+
+/* Modal for QR Code */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-content {
+    background: var(--le-blue);
+    border: 2px solid var(--le-gold);
+    padding: 40px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(197, 179, 88, 0.3);
+}
+
+.close-modal {
+    margin-top: 20px;
+    background: transparent;
+    border: 1px solid var(--le-silver);
+    color: var(--le-silver);
+    padding: 5px 15px;
+    cursor: pointer;
+}
+
+/* Instructor Dashboard specific */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.feedback-log {
+    height: 300px;
+    overflow-y: auto;
+    border: var(--glass-border);
+    padding: 10px;
+    font-size: 0.9rem;
+}
+
+.log-entry {
+    margin-bottom: 5px;
+    border-bottom: 1px solid #333;
+}
+
+/* Locked Session State */
+.locked-session {
+    filter: grayscale(100%);
+    pointer-events: none;
+    user-select: none;
+}
+
+.locked-session .dashboard-toolbar {
+    filter: none;
+    /* Keep toolbar active for instructor to entry/unlock */
+    pointer-events: auto;
+}
+
+/* Role Selector Styling */
+.role-logo {
+    max-width: 150px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 10px rgba(197, 179, 88, 0.5));
+}
+
+.name-input {
+    width: 300px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid var(--le-gold);
+    background: rgba(0, 0, 0, 0.5);
+    color: var(--le-white);
+    border-radius: 4px;
+    text-align: center;
+    font-size: 1rem;
+}
