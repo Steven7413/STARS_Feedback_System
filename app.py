@@ -546,5 +546,5 @@ if __name__ == '__main__':
 
     # Bind to Render's dynamic port, or fallback to 5001 locally
     port = int(os.environ.get('PORT', 5001))
-    socketio.run(app, debug=False, host='0.0.0.0', port=port)
+    socketio.run(app, debug=False, host='0.0.0.0', port=port, allow_unsafe_werkzeug=True)
 
