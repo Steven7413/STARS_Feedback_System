@@ -44,6 +44,7 @@ def start_tunnel():
     global public_url
     # Skip tunnel if running permanently in the cloud
     if os.environ.get('RENDER'):
+        public_url = os.environ.get('RENDER_EXTERNAL_URL')
         return
         
     print(" * Requesting secure tunnel via cloudflared...")
